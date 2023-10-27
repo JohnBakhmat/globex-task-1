@@ -1,45 +1,30 @@
 import { api } from "~/trpc/server";
 import { type UserType } from "~/schema/user";
 import Image from "next/image";
-export default async function Home() {
-  const users = await api.user.getAll.query();
-  const testUser = {
-    name: "Евгения Савченко",
-    phone: "+7 (918) 078-17-05",
-    email: "yysavchenk@mail.ru",
-  } as UserType;
+import { z } from "zod";
+import { Search } from "./_components/search";
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const query = z.string().optional().parse(searchParams.term);
+  const users = await api.user.getAll.mutate(query);
 
   if (!users) {
     return <div>Loading...</div>;
   }
 
-  const users2 = [testUser, ...users];
-
   return (
     <div className="font-['Proxima Nova'] flex h-screen w-screen bg-white">
       <div className="mx-20 mt-16 flex h-full w-full flex-col gap-8">
         <Search />
-        <div className="grid grid-cols-3 gap-x-[25px] gap-y-6 2xl:grid-cols-4">
-          {users2.map((user) => (
+        <div className="place-items-center grid grid-cols-3 gap-x-[25px] gap-y-6 2xl:grid-cols-4">
+          {users.map((user) => (
             <UserCard key={user.name} {...user} />
           ))}
         </div>
-      </div>
-    </div>
-  );
-}
-
-function Search() {
-  return (
-    <div className="relative w-full">
-      <input className="h-12 w-full rounded-3xl border border-[#D4DEFE] px-4 text-center text-3xl outline-[#D4DEFE]" />
-      <div className="absolute right-[26px] top-[14px] aspect-square">
-        <Image
-          src="/search.svg"
-          alt="search-icon"
-          width={19.61}
-          height={19.61}
-        />
       </div>
     </div>
   );
