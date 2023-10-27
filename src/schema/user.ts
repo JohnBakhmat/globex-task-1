@@ -9,3 +9,5 @@ export const userSchema = z.object({
     department: z.string(),
     hire_date: z.string(),
   });
+
+export type UserType = z.infer<typeof userSchema>;
