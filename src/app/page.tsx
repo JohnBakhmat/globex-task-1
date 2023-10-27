@@ -32,7 +32,7 @@ export default async function Home() {
 function Search() {
   return (
     <div className="relative w-full">
-      <input className="h-12 w-full rounded-3xl border border-[#D4DEFE] text-4xl" />
+      <input className="h-12 w-full rounded-3xl border border-[#D4DEFE] px-4 text-center text-3xl outline-[#D4DEFE]" />
       <div className="absolute right-[26px] top-[14px] aspect-square">
         <Image
           src="/search.svg"
